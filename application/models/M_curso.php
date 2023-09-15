@@ -120,6 +120,7 @@ class M_curso extends CI_Model
 
         if($retornoCurso['codigo']==1){
 
+            
             $sql = "update curso set estatus = '' where id_curso = $idcurso";
 
             $this->db->query($sql);
