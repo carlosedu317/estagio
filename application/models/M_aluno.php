@@ -129,7 +129,7 @@ class M_aluno extends CI_Model{
                  } else {
      
                      $dados = array('codigo' => 2, 'msg' => 'Houve algum problema na atualização do aluno.');
-     
+                     
                  }
      
              } else {
@@ -141,11 +141,11 @@ class M_aluno extends CI_Model{
              return $dados; 
      
          }
-    public function apagarAluno($ra, $usuario, $senha){
+    public function apagarAluno($ra, $usuario, $senha, $estatus){
 
         $professor = new M_professor();
      
-        $retornoProfessor = $professor->consultarUsuario($usuario, $senha);
+        $retornoProfessor = $professor->consultarUsuario($usuario, $senha, $estatus);
 
         if($retornoProfessor['codigo']==1){
             

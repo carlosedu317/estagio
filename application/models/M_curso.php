@@ -6,7 +6,9 @@ class M_curso extends CI_Model
 {
     public function inserirCurso($descricao, $estatus)
     {
+ 
         $sql = "INSERT INTO curso (descricao, estatus) VALUES ('$descricao', '$estatus')";
+
         $this->db->query($sql);
 
         if ($this->db->affected_rows() > 0) {
@@ -14,7 +16,7 @@ class M_curso extends CI_Model
         } else {
             $dados = array('codigo' => 2, 'msg' => 'Houve algum problema na inserção na tabela curso');
         }
-
+    
         return $dados;
     }
 
@@ -77,11 +79,11 @@ class M_curso extends CI_Model
         return $dados;
     }
 
-    public function apagarCurso($idCurso,$usuario,$senha)
+    public function apagarCurso($idCurso,$usuario,$senha, $estatus)
     {
         $professor = new M_professor();
       
-        $retornoProfessor = $professor->consultarUsuario($usuario, $senha);
+        $retornoProfessor = $professor->consultarUsuario($usuario, $senha, $estatus);
 
         if($retornoProfessor['codigo']==1){
             
