@@ -165,14 +165,14 @@ class Curso extends CI_Controller
 
         $json = file_get_contents('php://input');
         $resultado = json_decode($json);
-        $lista = array("idcurso" => '0',"usuario" =>'0',"senha" =>'0', "estatus" => '0');
+        $lista = array("idcurso" => '0',"usuario" =>'0',"senha" =>'0');
 
         if (verificarParam($resultado, $lista) == 1) {
 
             $this->setIdCurso($resultado->idcurso);
             $usuario = $resultado->usuario;
             $senha = $resultado->senha;
-            $estatus = $resultado->estatus;
+       
 
             if ($this->getIdCurso() == "" || $this->getIdCurso() == 0) {
 
@@ -181,7 +181,7 @@ class Curso extends CI_Controller
 
                 $this->load->model('M_curso');
 
-                $retorno = $this->M_curso->apagarCurso($this->getIdCurso(),$usuario,$senha, $estatus);
+                $retorno = $this->M_curso->apagarCurso($this->getIdCurso(),$usuario,$senha);
             }
         } else {
             $retorno = array('codigo' => 99, 'msg' => 'os campos vindo do frontEnd nao represntam o metodo de consulta, verifique');

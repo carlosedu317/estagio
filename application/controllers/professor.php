@@ -358,13 +358,11 @@ class Professor extends CI_Controller
 
         echo json_encode($retorno);
     }
-
-
     public function apagaCursoProf()
-
     {
         $json = file_get_contents('php://input');
         $resultado = json_decode($json);
+
         $lista = array(
             "idprofessor" => '0',
             "idcurso" => '0'
@@ -374,18 +372,46 @@ class Professor extends CI_Controller
             $this->setIdProfessor($resultado->idprofessor);
             $idcurso = $resultado->idcurso;
 
-            if ($this->getIdProfessor() == "" && $this->getIdProfessor() == 0) {
-                $retorno = array('codigo' => 3, 'msg' => 'ID do professor não informado');
-            } elseif ($idcurso == "" && $idcurso == 0) {
-                $retorno = array('codigo' => 3, 'msg' => 'ID do curso não informado');
+            if (empty($this->getIdProfessor())) {
+                $retorno = array('codigo' => 15, 'msg' => 'ID do professor não informado');
+            } elseif (empty($idcurso)) {
+                $retorno = array('codigo' => 16, 'msg' => 'ID do curso não informado');
             } else {
                 $this->load->model('M_professor');
-                $retorno = $this->M_professor->apagaProfCurso($this->getIdProfessor(), $idcurso);
+                $retorno = $this->M_professor->apagaCursoProf($this->getIdProfessor(), $idcurso);
             }
         } else {
-
-            $retorno = array('codigo' => 4, 'msg' => 'O ID informado não está na base de dados');
+            $retorno = array('codigo' => 99, 'msg' => 'Os campos vindos do front end não representam o método de inserção verifique.');
         }
+
+        echo json_encode($retorno);
+    }
+    public function ativaCursoProf()
+    {
+        $json = file_get_contents('php://input');
+        $resultado = json_decode($json);
+
+        $lista = array(
+            "idprofessor" => '0',
+            "idcurso" => '0'
+        );
+
+        if (verificarParam($resultado, $lista) == 1) {
+            $this->setIdProfessor($resultado->idprofessor);
+            $idcurso = $resultado->idcurso;
+
+            if (empty($this->getIdProfessor())) {
+                $retorno = array('codigo' => 15, 'msg' => 'ID do professor não informado');
+            } elseif (empty($idcurso)) {
+                $retorno = array('codigo' => 16, 'msg' => 'ID do curso não informado');
+            } else {
+                $this->load->model('M_professor');
+                $retorno = $this->M_professor->ativaCursoProf($this->getIdProfessor(), $idcurso);
+            }
+        } else {
+            $retorno = array('codigo' => 99, 'msg' => 'Os campos vindos do front end não representam o método de inserção verifique.');
+        }
+
         echo json_encode($retorno);
     }
 }

@@ -20,12 +20,12 @@ class M_curso extends CI_Model
         return $dados;
     }
 
-    public function consultarCurso($idCurso, $descricao, $estatus)
+    public function consultarCurso($idcurso, $descricao, $estatus)
     {
         $sql = "SELECT * FROM curso WHERE estatus = '$estatus'";
 
-        if ($idCurso != "" && $idCurso != 0) {
-            $sql .= " AND id_curso = '$idCurso'";
+        if ($idcurso != "" && $idcurso != 0) {
+            $sql .= " AND id_curso = '$idcurso'";
         }
 
         if (trim($descricao) != '') {
@@ -45,9 +45,9 @@ class M_curso extends CI_Model
         return $dados;
     }
 
-    public function consultarSoCurso($idCurso)
+    public function consultarSoCurso($idcurso)
     {
-        $sql = "SELECT * FROM curso WHERE id_curso = '$idCurso'";
+        $sql = "SELECT * FROM curso WHERE id_curso = '$idcurso'";
         $retorno = $this->db->query($sql);
 
         if ($retorno->num_rows() > 0) {
@@ -59,12 +59,12 @@ class M_curso extends CI_Model
         return $dados;
     }
 
-    public function alterarCurso($idCurso, $descricao, $estatus)
+    public function alterarCurso($idcurso, $descricao)
     {
-        $retornoCurso = $this->consultarSoCurso($idCurso);
+        $retornoCurso = $this->consultarSoCurso($idcurso);
 
         if ($retornoCurso['codigo'] == 1) {
-            $sql = "UPDATE curso SET descricao = '$descricao' WHERE id_curso = $idCurso AND estatus = '$estatus'";
+            $sql = "UPDATE curso SET descricao = '$descricao' WHERE id_curso = '$idcurso'";
             $this->db->query($sql);
 
             if ($this->db->affected_rows() > 0) {
@@ -79,25 +79,25 @@ class M_curso extends CI_Model
         return $dados;
     }
 
-    public function apagarCurso($idCurso,$usuario,$senha, $estatus)
+    public function apagarCurso($idcurso,$usuario,$senha)
     {
         $professor = new M_professor();
       
-        $retornoProfessor = $professor->consultarUsuario($usuario, $senha, $estatus);
+        $retornoProfessor = $professor->loginProf($usuario, $senha);
 
         if($retornoProfessor['codigo']==1){
             
-            $retornoCurso = $this->consultarSoCurso($idCurso);
+            $retornoCurso = $this->consultarSoCurso($idcurso);
 
             if ($retornoCurso['codigo'] == 1){
-                $sql = "SELECT * FROM curso WHERE id_curso = '$idCurso' AND estatus = 'D'";                
+                $sql = "SELECT * FROM curso WHERE id_curso = '$idcurso' AND estatus = 'D'";                
 
                 $retorno = $this->db->query($sql);
 
                 if ($retorno->num_rows() > 0) {
                     $dados = array('codigo' => 7, 'msg' => 'Curso já foi apagado');
                 } else {
-                    $sql = "UPDATE curso SET estatus ='D' WHERE id_curso = $idCurso"; 
+                    $sql = "UPDATE curso SET estatus ='D' WHERE id_curso = $idcurso"; 
                     $this->db->query($sql);
 
                     if($this->db->affected_rows() > 0){

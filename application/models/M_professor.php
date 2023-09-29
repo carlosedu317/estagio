@@ -57,27 +57,28 @@ class M_professor extends CI_Model
         return $dados;
     }
 
-    public function ConsultarCursoProf($idprofessor, $idcurso)
+    public function consultarCursoProf($idcurso, $idprofessor, $estatus)
     {
-        $sql = "select * from cursoprof where id_professor = '$idprofessor' and id_curso = '$idcurso'";
+        $sql = "SELECT * FROM cursoprof WHERE estatus = '$estatus'";
+
+        if (!empty($idprofessor)) {
+            $sql .= " AND id_professor = '$idprofessor'";
+        }
+
+        if (!empty($idcurso)) {
+            $sql .= " AND id_curso = '$idcurso'";
+        }
 
         $retorno = $this->db->query($sql);
 
         if ($retorno->num_rows() > 0) {
-            $dados = array(
-                'codigo' => 1,
-                'msg' => 'Consulta efetuada com sucesso.',
-                'dados' => $retorno->result()
-            );
+            $dados = array('codigo' => 1, 'msg' => 'Consulta efetuada com sucesso', 'dados' => $retorno->result());
         } else {
-            $dados = array(
-                'codigo' => 2,
-                'msg' => 'Dados não encontrados.'
-            );
+            $dados = array('codigo' => 2, 'msg' => 'Dados não encontrados');
         }
+
         return $dados;
     }
-
 
     public function consultarSoProfessor($idprofessor)
     {
@@ -235,7 +236,7 @@ class M_professor extends CI_Model
 
     public function cursoProfesor($idprofessor, $idcurso)
     {
-        $retornoCursoProf = $this->consultarCursoProfessor($idprofessor, $idcurso);
+        $retornoCursoProf = $this->consultaSoCursoProf($idprofessor, $idcurso);
 
         if ($retornoCursoProf['codigo'] == 2) {
             $sql = "insert into cursoprof (id_professor,id_curso) values ('$idprofessor','$idcurso')";
@@ -253,20 +254,7 @@ class M_professor extends CI_Model
         return $dados;
     }
 
-    public function consultarCursoProfessor($idcurso, $idprofessor)
-    {
-        $sql = "select * from cursoprof where id_professor = $idprofessor and id_curso = $idcurso";
-        $retorno = $this->db->query($sql);
-
-        if ($retorno->num_rows() > 0) {
-            $dados = array('codigo' => 1, 'msg' => 'Consulta efetuada com sucesso.');
-        } else {
-            $dados = array('codigo' => 2, 'msg' => 'Dados não encontrados.');
-        }
-
-        return $dados;
-    }
-    public function consultaSoCursoProf($idcurso, $idprofessor)
+public function consultaSoCursoProf($idprofessor,$idcurso)
     {
         $sql = "select * from cursoprof where id_professor = $idprofessor and id_curso = $idcurso";
         $retorno = $this->db->query($sql);
@@ -280,21 +268,47 @@ class M_professor extends CI_Model
         return $dados;
     }
 
-    public function apagaProfCurso($idcurso, $idprofessor)
+    public function apagaCursoProf($idprofessor, $idcurso)
     {
         $retornoProfCurso = $this->consultaSoCursoProf($idprofessor, $idcurso);
 
         if ($retornoProfCurso['codigo'] == 1) {
-            $sql = "UPDATE cursoprof SET estatus = 'D' WHERE id_professor = $idprofessor and id_curso = $idcurso";
+            $sql = "UPDATE cursoprof SET estatus = 'D' WHERE id_professor = '$idprofessor' and id_curso = '$idcurso'";
+
+
+
             $this->db->query($sql);
 
             if ($this->db->affected_rows() > 0) {
-                $dados = array('codigo' => 1, 'msg' => 'cursoProf desativado corretamente');
+                $dados = array('codigo' => 1, 'msg' => 'cursoprof desativado corretamente');
             } else {
-                $dados = array('codigo' => 2, 'msg' => 'Houve um problema na desativação do Professor curso');
+                $dados = array('codigo' => 2, 'msg' => 'Houve um problema na desativação do cursoprof');
             }
         } else {
             $dados = array('codigo' => 4, 'msg' => 'ProfCurso informado não está na base de dados');
+        }
+
+        return $dados;
+    }
+
+    public function ativaCursoProf($idprofessor, $idcurso)
+    {
+        $retornoProfCurso = $this->consultaSoCursoProf($idprofessor, $idcurso);
+
+        if ($retornoProfCurso['codigo'] == 1) {
+            $sql = "UPDATE cursoprof SET estatus = '' WHERE id_professor = '$idprofessor' and id_curso = '$idcurso'";
+
+
+
+            $this->db->query($sql);
+
+            if ($this->db->affected_rows() > 0) {
+                $dados = array('codigo' => 1, 'msg' => 'cursoprof ativado corretamente');
+            } else {
+                $dados = array('codigo' => 2, 'msg' => 'Houve um problema na ativação do cursoprof');
+            }
+        } else {
+            $dados = array('codigo' => 4, 'msg' => 'cursoProf informado não está na base de dados');
         }
 
         return $dados;

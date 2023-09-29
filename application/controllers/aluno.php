@@ -147,20 +147,20 @@ class Aluno extends CI_Controller
         $json = file_get_contents('php://input');
         $resultado = json_decode($json);
 
-        $lista = array("ra" => '0',"usuario" => '0',"senha" => '0', "estatus" => '0');
+        $lista = array("ra" => '0',"usuario" => '0',"senha" => '0');
 
         if (verificarParam($resultado, $lista) == 1) {
             $this->setRA($resultado->ra);
             $usuario = $resultado->usuario;
             $senha = $resultado->senha;
-            $estatus = $resultado->estatus;
+          
 
             if (strlen($this->getRA()) == 0) {
                 $retorno = array('codigo' => 3, 'msg' => 'ra do aluno nao informado');
             } else {
                 $this->load->model('M_aluno');
 
-                $retorno = $this->M_aluno->apagarAluno($this->getRA(), $usuario, $senha, $estatus);
+                $retorno = $this->M_aluno->apagarAluno($this->getRA(), $usuario, $senha);
             }
         } else {
             $retorno = array('codigo' => 99, 'msg' => 'os campos vindos do front nao representam o metodo de consulta');
