@@ -100,29 +100,22 @@ class M_aluno extends CI_Model
         $retornoAluno = $this->consultarSoAluno($ra);
 
         if ($retornoAluno['codigo'] == 1) {
-
             $sql = "UPDATE aluno SET ";
 
-
             if (!empty($nome)) {
-
                 $sql .= "nome = '$nome', ";
             }
-
             if (!empty($idcurso)) {
-
                 $sql .= "id_curso = $idcurso, ";
             }
 
             $sql = rtrim($sql, ', ');
-
             $sql .= " WHERE ra = '$ra'";
 
             $this->db->query($sql);
 
 
             if ($this->db->affected_rows() > 0) {
-
                 $dados = array('codigo' => 1, 'msg' => 'Dados do aluno atualizados corretamente');
             } else {
 
